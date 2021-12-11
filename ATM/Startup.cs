@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ATM.Controllers;
 using ATM.Model.DbModel;
 using ATM.Model.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +33,10 @@ namespace ATM
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ATM", Version = "v1.0" });
             });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger<AtmController>>();
+            services.AddSingleton(typeof(ILogger), logger);
         }
 
 

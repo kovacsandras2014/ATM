@@ -45,17 +45,15 @@ namespace ATM
             if (charge.Any(v => !AcceptedValues.AcceptedDenominations.Contains(v.Key)))
                 throw new AtmUnacceptedValueException("Charge value contains unaccepted denomination!");
 
-            int total = 0;                                              // ide gyűjtjük az összeget
             foreach (var item in charge)                                // végiglépdelünk a paraméterlistán
             {
                 Content.TryGetValue(item.Key, out int currentValue);    // ha van már ilyen címlet, akkor kivesszük a darabszámát
                 currentValue += item.Value;                             // hozzáadjuk a darabszámhoz a paraméterlistában talált darabszámot
                 Content[item.Key] = currentValue;                       // az így növelt értéket visszatesszük az ATM listájába
-                total += item.Key * currentValue;                       // mindösszesen
             }
             _serializer.SaveContent(Content);                           // mentjük az update-elt tartalmat
 
-            return total;
+            return Content.Sum(item => item.Key * item.Value);
         }
 
 
@@ -90,7 +88,7 @@ namespace ATM
             if (desiredMoney > 0)                                               // hoppá, nem volt fedezet a teljes összegre!                                      
                 throw new AtmPaymentException($"{money} cannot be paid");
 
-            // Most viszont le kell vonni a kigényelt összegeket az ATM-ből
+            // Most viszont le kell vonni a kiigényelt összegeket az ATM-ből
             foreach (var item in result)
             {
                 Content[item.Key] -= item.Value;                                // Nem kell TryGetValue-val kísérletezgetni, hiszen az eredmény összeállításánál már láttuk, hogy van benne annyi                            

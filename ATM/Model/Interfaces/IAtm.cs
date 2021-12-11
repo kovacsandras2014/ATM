@@ -2,8 +2,6 @@
 
 namespace ATM.Model.Interfaces
 {
-    public interface IAtm
-    {
         /// <summary>
         ///     Egy ATM implementációtól elvárt működés
         /// </summary>
@@ -31,5 +29,4 @@ namespace ATM.Model.Interfaces
             /// </returns>
             IDictionary<int, int> Pay(int money);
         }
-    }
 }
